@@ -2,4 +2,7 @@
     "require": {
         "webonyx/graphql-php": "^0.9.11"
     },
+    "autoload": {
+        "psr-4": {"StarWar\\": "StarWar/"}
+    }
 }

@@ -1,4 +1,14 @@
 ## Go go gadget GraphQL
+Make sure you have PHP installed outside the VM:
+```
+php -v
+```
+
+If not:
+```
+brew install homebrew/php/php72
+```
+
 Run the server via command line: 
 ```
 php -S localhost:8080 ./graphql.php

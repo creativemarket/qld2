@@ -35,7 +35,7 @@ The following query returns pretty much all of the sample data, which can be fou
   viewer {
     ...charData
   }
-	rey: character(id: 1) {
+  rey: character(id: 1) {
     ...charData
   }
   leia: character(id: 2) {

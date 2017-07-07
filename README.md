@@ -9,9 +9,19 @@ If not:
 brew install homebrew/php/php72
 ```
 
-Run the server via command line: 
+Install packages:
+```
+npm install
+```
+
+Run the graph server via command line: 
 ```
 php -S localhost:8080 ./graphql.php
+```
+
+Run the dev server separately (both servers runnning):
+```
+npm run server
 ```
 
 ## Browser + docs

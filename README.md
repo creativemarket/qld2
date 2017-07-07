@@ -73,3 +73,9 @@ fragment quoteInfo on Quote {
   totalReplyCount
 }
 ```
+
+## Vendor docs
+
+[GraphQL](http://graphql.org/) 
+
+[GraphQL-PHP](http://webonyx.github.io/graphql-php/) 

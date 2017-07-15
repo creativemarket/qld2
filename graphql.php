@@ -36,9 +36,12 @@
 		// GraphQL schema to be passed to query executor:
 		$schema = new Schema([
 			'query' => Types::query(),
+			'mutation' => Types::mutation()
 		]);
 
-		$result = GraphQL::execute($schema, $data['query'], null, $appContext, (array) $data['variables']);
+		$args = json_decode($data['variables'], true);
+
+		$result = GraphQL::execute($schema, $data['query'], null, $appContext, $args);
 		$httpStatus = 200;
 	} catch (\Exception $e) {
 		$httpStatus = 500;

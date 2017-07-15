@@ -5,6 +5,7 @@
 	use StarWar\Type\MovieType;
 	use StarWar\Type\QuoteType;
 	use StarWar\Type\QueryType;
+	use StarWar\Type\MutationType;
 	use GraphQL\Type\Definition\ListOfType;
 	use GraphQL\Type\Definition\NonNull;
 	use GraphQL\Type\Definition\Type;
@@ -25,16 +26,17 @@
 		private static $movie;
 		private static $quote;
 		private static $query;
+		private static $mutation;
 
 		/**
-		 * @return CharacterType()
+		 * @return CharacterType
 		 */
 		public static function character() {
 			return self::$character ?: (self::$character = new CharacterType());
 		}
 
 		/**
-		 * @return MovieType()
+		 * @return MovieType
 		 */
 		public static function movie() {
 			return self::$movie ?: (self::$movie = new MovieType());
@@ -52,6 +54,13 @@
 		 */
 		public static function query() {
 			return self::$query ?: (self::$query = new QueryType());
+		}
+
+		/**
+		 * @return MutationType
+		 */
+		public static function mutation() {
+			return self::$mutation ?: (self::$mutation = new MutationType());
 		}
 
 		// Let's add internal types as well for consistent experience

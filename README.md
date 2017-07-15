@@ -74,6 +74,26 @@ fragment quoteInfo on Quote {
 }
 ```
 
+## Sample mutation
+```
+mutation Mutation($characterId: ID, $movieId: ID, $body: String) {
+  createQuote(characterId: $characterId, movieId: $movieId, body: $body) {
+    body
+    character {
+      firstName
+    }
+  }
+}
+```
+```
+# variables
+{
+  "characterId": 2,
+  "movieId": 1, 
+  "body": "make me a new quote!"
+}
+```
+
 ## Vendor docs
 
 [GraphQL](http://graphql.org/) 

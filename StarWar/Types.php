@@ -4,6 +4,7 @@
 	use StarWar\Type\CharacterType;
 	use StarWar\Type\MovieType;
 	use StarWar\Type\QuoteType;
+	use StarWar\Type\QuoteInputType;
 	use StarWar\Type\QueryType;
 	use StarWar\Type\MutationType;
 	use GraphQL\Type\Definition\ListOfType;
@@ -25,6 +26,7 @@
 		private static $character;
 		private static $movie;
 		private static $quote;
+		private static $quoteInput;
 		private static $query;
 		private static $mutation;
 
@@ -47,6 +49,13 @@
 		 */
 		public static function quote() {
 			return self::$quote ?: (self::$quote = new QuoteType());
+		}
+
+		/**
+		 * @return QuoteInputType
+		 */
+		public static function quoteInput() {
+			return self::$quoteInput ?: (self::$quoteInput = new QuoteInputType());
 		}
 
 		/**

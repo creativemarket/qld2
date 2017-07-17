@@ -107,7 +107,7 @@
 
 		public static function addQuote($quoteData) {
 			$quoteData['id'] = self::lastQuote()->id + 1;
-			$quote = new Quote($quoteData);
+			$quote = new Quote($quoteData['quoteInput']);
 			self::$quotes[$quoteData['id']] = $quote;
 		}
 

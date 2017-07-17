@@ -74,10 +74,10 @@ fragment quoteInfo on Quote {
 }
 ```
 
-## Sample mutation
+## Sample mutation with input object
 ```
-mutation Mutation($characterId: ID, $movieId: ID, $body: String) {
-  createQuote(characterId: $characterId, movieId: $movieId, body: $body) {
+mutation Mutation($quoteInput: QuoteInput!) {
+  createQuote(quoteInput: $quoteInput) {
     body
     character {
       firstName
@@ -88,9 +88,11 @@ mutation Mutation($characterId: ID, $movieId: ID, $body: String) {
 ```
 # variables
 {
-  "characterId": 2,
-  "movieId": 1, 
-  "body": "make me a new quote!"
+	"quoteInput": {
+	  "characterId": 2,
+	  "movieId": 1, 
+	  "body": "make me a new quote!"
+	}
 }
 ```
 

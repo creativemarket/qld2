@@ -17,7 +17,7 @@
 						'type' => Types::quote(),
 						'description' => 'Returns newly created quote',
 						'args' => [
-							'characterId' => Types::id(),
+							'quoteInput' => Types::quoteInput(),
 							'movieId' => Types::id(),
 							'body' => Types::string()
 						]

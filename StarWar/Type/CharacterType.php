@@ -6,11 +6,14 @@
 	use GraphQL\Type\Definition\ResolveInfo;
 
 	class CharacterType extends ObjectType {
+		/**
+		 * CharacterType constructor.
+		 */
 		public function __construct() {
 			$config = [
 				'name' => 'Character',
 				'description' => 'Our heroines',
-				'fields' => function() {
+				'fields' => function () {
 					return [
 						'id' => Types::id(),
 						'email' => Types::string(),
@@ -22,13 +25,13 @@
 						],
 						'fieldWithError' => [
 							'type' => Types::string(),
-							'resolve' => function() {
+							'resolve' => function () {
 								throw new \Exception("This is error field");
-							}
-						]
+							},
+						],
 					];
 				},
-				'resolveField' => function($value, $args, $context, ResolveInfo $info) {
+				'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
 					if (method_exists($this, $info->fieldName)) {
 						return $this->{$info->fieldName}($value, $args, $context, $info);
 					} else {

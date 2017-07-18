@@ -18,16 +18,21 @@
 	 *
 	 * As simplistic as possible for the sake of clarity of this example.
 	 * Your own may be more dynamic (or even code-generated).
-	 *
-	 * @package GraphQL\Examples\Blog
 	 */
 	class Types {
 		// Object types:
+
+		/** @var CharacterType */
 		private static $character;
+		/** @var MovieType */
 		private static $movie;
+		/** @var QuoteType */
 		private static $quote;
+		/** @var QuoteInputType */
 		private static $quoteInput;
+		/** @var QueryType */
 		private static $query;
+		/** @var MutationType */
 		private static $mutation;
 
 		/**
@@ -74,6 +79,9 @@
 
 		// Let's add internal types as well for consistent experience
 
+		/**
+		 * @return \GraphQL\Type\Definition\BooleanType
+		 */
 		public static function boolean() {
 			return Type::boolean();
 		}

@@ -6,10 +6,13 @@
 	use GraphQL\Type\Definition\ResolveInfo;
 
 	class QuoteInputType extends InputObjectType {
+		/**
+		 * QuoteInputType constructor.
+		 */
 		public function __construct() {
 			$config = [
 				'name' => 'QuoteInput',
-				'fields' => function() {
+				'fields' => function () {
 					return [
 						'movieId' => [
 							'type' => Types::int(),
@@ -29,7 +32,7 @@
 						],
 					];
 				},
-				'resolveField' => function($value, $args, $context, ResolveInfo $info) {
+				'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
 					if (method_exists($this, $info->fieldName)) {
 						return $this->{$info->fieldName}($value, $args, $context, $info);
 					} else {

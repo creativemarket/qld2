@@ -4,7 +4,9 @@
 	use StarWar\Type\CharacterType;
 	use StarWar\Type\MovieType;
 	use StarWar\Type\QuoteType;
+	use StarWar\Type\QuoteInputType;
 	use StarWar\Type\QueryType;
+	use StarWar\Type\MutationType;
 	use GraphQL\Type\Definition\ListOfType;
 	use GraphQL\Type\Definition\NonNull;
 	use GraphQL\Type\Definition\Type;
@@ -16,25 +18,32 @@
 	 *
 	 * As simplistic as possible for the sake of clarity of this example.
 	 * Your own may be more dynamic (or even code-generated).
-	 *
-	 * @package GraphQL\Examples\Blog
 	 */
 	class Types {
 		// Object types:
+
+		/** @var CharacterType */
 		private static $character;
+		/** @var MovieType */
 		private static $movie;
+		/** @var QuoteType */
 		private static $quote;
+		/** @var QuoteInputType */
+		private static $quoteInput;
+		/** @var QueryType */
 		private static $query;
+		/** @var MutationType */
+		private static $mutation;
 
 		/**
-		 * @return CharacterType()
+		 * @return CharacterType
 		 */
 		public static function character() {
 			return self::$character ?: (self::$character = new CharacterType());
 		}
 
 		/**
-		 * @return MovieType()
+		 * @return MovieType
 		 */
 		public static function movie() {
 			return self::$movie ?: (self::$movie = new MovieType());
@@ -48,14 +57,31 @@
 		}
 
 		/**
+		 * @return QuoteInputType
+		 */
+		public static function quoteInput() {
+			return self::$quoteInput ?: (self::$quoteInput = new QuoteInputType());
+		}
+
+		/**
 		 * @return QueryType
 		 */
 		public static function query() {
 			return self::$query ?: (self::$query = new QueryType());
 		}
 
+		/**
+		 * @return MutationType
+		 */
+		public static function mutation() {
+			return self::$mutation ?: (self::$mutation = new MutationType());
+		}
+
 		// Let's add internal types as well for consistent experience
 
+		/**
+		 * @return \GraphQL\Type\Definition\BooleanType
+		 */
 		public static function boolean() {
 			return Type::boolean();
 		}

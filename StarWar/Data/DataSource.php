@@ -9,12 +9,20 @@
 	 *
 	 */
 	class DataSource {
+		/** @var array */
 		private static $characters = [];
+		/** @var array */
 		private static $movies = [];
+		/** @var array */
 		private static $quotes = [];
+		/** @var array */
 		private static $movieQuotes = [];
+		/** @var array */
 		private static $quoteReplies = [];
 
+		/**
+		 * @return void
+		 */
 		public static function init() {
 			self::$characters = [
 				'1' => new Character(['id' => '1', 'email' => 'rey@starwar.com', 'firstName' => 'Rey', 'lastName' => '']),
@@ -39,7 +47,7 @@
 
 			self::$movieQuotes = [
 				'1' => ['100', '110', '112'],
-				'2' => ['113', '114']
+				'2' => ['113', '114'],
 			];
 
 			self::$quoteReplies = [
@@ -48,61 +56,116 @@
 			];
 		}
 
+		/**
+		 * @param $id
+		 * @return character|null
+		 */
 		public static function findCharacter($id) {
 			return isset(self::$characters[$id]) ? self::$characters[$id] : null;
 		}
 
+		/**
+		 * @param $id
+		 * @return movie|null
+		 */
 		public static function findMovie($id) {
 			return isset(self::$movies[$id]) ? self::$movies[$id] : null;
 		}
 
+		/**
+		 * @param $id
+		 * @return quote|null
+		 */
 		public static function findQuote($id) {
 			return isset(self::$quotes[$id]) ? self::$quotes[$id] : null;
 		}
 
+		/**
+		 * @return movie
+		 */
 		public static function findLatestMovie() {
 			return array_pop(self::$movies);
 		}
 
+		/**
+		 * @param      $limit
+		 * @param null $afterId
+		 * @return array
+		 */
 		public static function findMovies($limit, $afterId = null) {
 			$start = $afterId ? (int) array_search($afterId, array_keys(self::$movies)) + 1 : 0;
 			return array_slice(array_values(self::$movies), $start, $limit);
 		}
 
+		/**
+		 * @param      $movieId
+		 * @param int  $limit
+		 * @param null $afterId
+		 * @return array
+		 */
 		public static function findQuotes($movieId, $limit = 5, $afterId = null) {
-			$movieQuotes = isset(self::$movieQuotes[$movieId]) ? self::$movieQuotes[$movieId] : [];
-
-			$start = isset($after) ? (int) array_search($afterId, $movieQuotes) + 1 : 0;
-			$movieQuotes = array_slice($movieQuotes, $start, $limit);
+			$movieQuotes	= isset(self::$movieQuotes[$movieId]) ? self::$movieQuotes[$movieId] : [];
+			$start 			= isset($after) ? (int) array_search($afterId, $movieQuotes) + 1 : 0;
+			$movieQuotes	= array_slice($movieQuotes, $start, $limit);
 
 			return array_map(
-				function($quoteId) {
+				function ($quoteId) {
 					return self::$quotes[$quoteId];
 				},
 				$movieQuotes
 			);
 		}
 
+		/**
+		 * @param      $quoteId
+		 * @param int  $limit
+		 * @param null $afterId
+		 * @return array
+		 */
 		public static function findReplies($quoteId, $limit = 5, $afterId = null) {
-			$quoteReplies = isset(self::$quoteReplies[$quoteId]) ? self::$quoteReplies[$quoteId] : [];
-
-			$start = isset($after) ? (int) array_search($afterId, $quoteReplies) + 1: 0;
-			$quoteReplies = array_slice($quoteReplies, $start, $limit);
+			$quoteReplies	= isset(self::$quoteReplies[$quoteId]) ? self::$quoteReplies[$quoteId] : [];
+			$start			= isset($after) ? (int) array_search($afterId, $quoteReplies) + 1 : 0;
+			$quoteReplies	= array_slice($quoteReplies, $start, $limit);
 
 			return array_map(
-				function($replyId) {
+				function ($replyId) {
 					return self::$quotes[$replyId];
 				},
 				$quoteReplies
 			);
 		}
 
+		/**
+		 * @param $movieId
+		 * @return int
+		 */
 		public static function countQuotes($movieId) {
 			return isset(self::$movieQuotes[$movieId]) ? count(self::$movieQuotes[$movieId]) : 0;
 		}
 
+		/**
+		 * @param $quoteId
+		 * @return int
+		 */
 		public static function countReplies($quoteId) {
 			return isset(self::$quoteReplies[$quoteId]) ? count(self::$quoteReplies[$quoteId]) : 0;
 		}
 
+		/**
+		 * @param $quoteData
+		 * @return void
+		 */
+		public static function addQuote($quoteData) {
+			$quoteData['id']	= self::lastQuote()->id + 1;
+			$quote 				= new Quote($quoteData['quoteInput']);
+
+			self::$quotes[$quoteData['id']] = $quote;
+		}
+
+		/**
+		 * @return quote
+		 */
+		public static function lastQuote() {
+			return end(self::$quotes);
+		}
 	}

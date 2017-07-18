@@ -2,32 +2,33 @@
 	namespace StarWar\Type;
 
 	use StarWar\Types;
-	use GraphQL\Type\Definition\ObjectType;
+	use GraphQL\Type\Definition\InputObjectType;
 	use GraphQL\Type\Definition\ResolveInfo;
 
-	class CharacterType extends ObjectType {
+	class QuoteInputType extends InputObjectType {
 		/**
-		 * CharacterType constructor.
+		 * QuoteInputType constructor.
 		 */
 		public function __construct() {
 			$config = [
-				'name' => 'Character',
-				'description' => 'Our heroines',
+				'name' => 'QuoteInput',
 				'fields' => function () {
 					return [
-						'id' => Types::id(),
-						'email' => Types::string(),
-						'firstName' => [
-							'type' => Types::string(),
+						'movieId' => [
+							'type' => Types::int(),
+							'description' => 'MovieId for new Quote',
 						],
-						'lastName' => [
-							'type' => Types::string(),
+						'characterId' => [
+							'type' => Types::int(),
+							'description' => 'CharacterId for new Quote',
 						],
-						'fieldWithError' => [
+						'parent' => [
+							'type' => Types::int(),
+							'description' => 'ParentId for new Quote',
+						],
+						'body' => [
 							'type' => Types::string(),
-							'resolve' => function () {
-								throw new \Exception("This is error field");
-							},
+							'description' => 'Body for new Quote',
 						],
 					];
 				},

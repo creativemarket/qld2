@@ -16,28 +16,17 @@
 				'fields' => function () {
 					return [
 						'id' => Types::id(),
-						'email' => Types::string(),
-						'firstName' => [
-							'type' => Types::string(),
-						],
-						'lastName' => [
-							'type' => Types::string(),
-						],
-						'fieldWithError' => [
-							'type' => Types::string(),
-							'resolve' => function () {
-								throw new \Exception("This is error field");
-							},
-						],
+						'name' => Types::string(),
 					];
 				},
 				'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
-					if (method_exists($this, $info->fieldName)) {
-						return $this->{$info->fieldName}($value, $args, $context, $info);
+					$method = 'resolve' . ucfirst($info->fieldName);
+					if (method_exists($this, $method)) {
+						return $this->{$method}($value, $args, $context, $info);
 					} else {
 						return $value->{$info->fieldName};
 					}
-				}
+				},
 			];
 			parent::__construct($config);
 		}

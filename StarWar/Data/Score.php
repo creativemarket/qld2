@@ -3,15 +3,15 @@
 
 	use GraphQL\Utils;
 
-	class Movie {
+	class Score {
 		/** @var integer */
-		public $id;
+		public $score;
 
-		/** @var string */
-		public $title;
+		/** @var integer */
+		public $userId;
 
 		/**
-		 * Movie constructor.
+		 * Score constructor.
 		 * @param array $data
 		 */
 		public function __construct(array $data) {

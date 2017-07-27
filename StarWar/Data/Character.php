@@ -4,17 +4,11 @@
 	use GraphQL\Utils;
 
 	class Character {
-		/** @var string */
+		/** @var integer */
 		public $id;
 
 		/** @var string */
-		public $email;
-
-		/** @var string */
-		public $firstName;
-
-		/** @var string */
-		public $lastName;
+		public $name;
 
 		/**
 		 * Character constructor.

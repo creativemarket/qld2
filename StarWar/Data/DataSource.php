@@ -8,164 +8,114 @@
 	 * Data layer for real app may use Doctrine or query the database directly (e.g. in CQRS style)
 	 *
 	 */
-	class DataSource {
-		/** @var array */
-		private static $characters = [];
-		/** @var array */
-		private static $movies = [];
-		/** @var array */
-		private static $quotes = [];
-		/** @var array */
-		private static $movieQuotes = [];
-		/** @var array */
-		private static $quoteReplies = [];
+	class DataSource extends \SQLite3 {
+		/** location of sqlite3 db */
+		CONST FILENAME = 'starwar.db';
 
 		/**
-		 * @return void
+		 * DataSource constructor.
 		 */
-		public static function init() {
-			self::$characters = [
-				'1' => new Character(['id' => '1', 'email' => 'rey@starwar.com', 'firstName' => 'Rey', 'lastName' => '']),
-				'2' => new Character(['id' => '2', 'email' => 'leia@starwar.com', 'firstName' => 'Leia', 'lastName' => 'Organa']),
-				'3' => new Character(['id' => '3', 'email' => 'maz@starwar.com', 'firstName' => 'Maz', 'lastName' => 'Kanata']),
-			];
-
-			self::$movies = [
-				'1' => new Movie(['id' => '1', 'title' => 'A New Hope']),
-				'2' => new Movie(['id' => '2', 'title' => 'The Force Awakens']),
-			];
-
-			self::$quotes = [
-				'100' => new Quote(['id' => '100', 'characterId' => '1', 'movieId' => '2', 'body' => 'The garbage will do']),
-				'110' => new Quote(['id' => '110', 'characterId' => '2', 'movieId' => '2', 'body' => 'The saber. Take it.']),
-				'111' => new Quote(['id' => '111', 'characterId' => '1', 'movieId' => '2', 'body' => 'I\'m never touching that thing again', 'parentId' => '110']),
-				'112' => new Quote(['id' => '112', 'characterId' => '3', 'movieId' => '2', 'body' => 'I like that Wookie']),
-				'113' => new Quote(['id' => '113', 'characterId' => '2', 'movieId' => '1', 'body' => 'Into the garbage chute, fly boy.']),
-				'114' => new Quote(['id' => '114', 'characterId' => '2', 'movieId' => '1', 'body' => 'It\'s a wonder you\'re still alive.']),
-				'115' => new Quote(['id' => '115', 'characterId' => '2', 'movieId' => '1', 'body' => 'Will someone get this big walking carpet out of my way?', 'parentId' => '114']),
-			];
-
-			self::$movieQuotes = [
-				'1' => ['100', '110', '112'],
-				'2' => ['113', '114'],
-			];
-
-			self::$quoteReplies = [
-				'110' => ['111'],
-				'114' => ['115'],
-			];
+		public function __construct() {
+			$this->open(self::FILENAME);
 		}
 
 		/**
 		 * @param $id
 		 * @return character|null
 		 */
-		public static function findCharacter($id) {
-			return isset(self::$characters[$id]) ? self::$characters[$id] : null;
+		public function findCharacter($id) {
+			$character = $this->find('characters', $id);
+			return new Character($character);
 		}
 
 		/**
 		 * @param $id
 		 * @return movie|null
 		 */
-		public static function findMovie($id) {
-			return isset(self::$movies[$id]) ? self::$movies[$id] : null;
+		public function findMovie($id) {
+			$movie = $this->find('movies', $id);
+			return new Movie($movie);
 		}
 
 		/**
 		 * @param $id
 		 * @return quote|null
 		 */
-		public static function findQuote($id) {
-			return isset(self::$quotes[$id]) ? self::$quotes[$id] : null;
+		public function findQuote($id) {
+			$quote = $this->find('quotes', $id);
+			return new Quote($quote);
 		}
 
 		/**
-		 * @return movie
+		 * @param $id
+		 * @return score|null
 		 */
-		public static function findLatestMovie() {
-			return array_pop(self::$movies);
+		public function findScore($id) {
+			$score = $this->find('scores', $id);
+			return new Score($score);
+		}
+
+		/*
+		 * @param $id
+		 * @return user|null
+		 */
+		public function findUser($id) {
+			$user = $this->find('users', $id);
+			return new User($user);
 		}
 
 		/**
-		 * @param      $limit
-		 * @param null $afterId
 		 * @return array
 		 */
-		public static function findMovies($limit, $afterId = null) {
-			$start = $afterId ? (int) array_search($afterId, array_keys(self::$movies)) + 1 : 0;
-			return array_slice(array_values(self::$movies), $start, $limit);
+		public function findCharacters() {
+			$results	= $this->findAll('characters');
+			$characters	= [];
+			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+				array_push($characters, new Character($row));
+			}
+			return $characters;
 		}
 
 		/**
-		 * @param      $movieId
-		 * @param int  $limit
-		 * @param null $afterId
 		 * @return array
 		 */
-		public static function findQuotes($movieId, $limit = 5, $afterId = null) {
-			$movieQuotes	= isset(self::$movieQuotes[$movieId]) ? self::$movieQuotes[$movieId] : [];
-			$start 			= isset($after) ? (int) array_search($afterId, $movieQuotes) + 1 : 0;
-			$movieQuotes	= array_slice($movieQuotes, $start, $limit);
-
-			return array_map(
-				function ($quoteId) {
-					return self::$quotes[$quoteId];
-				},
-				$movieQuotes
-			);
+		public function findMovies() {
+			$results	= $this->findAll('movies');
+			$movies		= [];
+			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+				array_push($movies, new Movie($row));
+			}
+			return $movies;
 		}
 
 		/**
-		 * @param      $quoteId
-		 * @param int  $limit
-		 * @param null $afterId
 		 * @return array
 		 */
-		public static function findReplies($quoteId, $limit = 5, $afterId = null) {
-			$quoteReplies	= isset(self::$quoteReplies[$quoteId]) ? self::$quoteReplies[$quoteId] : [];
-			$start			= isset($after) ? (int) array_search($afterId, $quoteReplies) + 1 : 0;
-			$quoteReplies	= array_slice($quoteReplies, $start, $limit);
-
-			return array_map(
-				function ($replyId) {
-					return self::$quotes[$replyId];
-				},
-				$quoteReplies
-			);
+		public function findQuotes() {
+			$results	= $this->findAll('quotes');
+			$quotes		=  [];
+			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+				array_push($quotes, new Quote($row));
+			}
+			return $quotes;
 		}
 
 		/**
-		 * @param $movieId
-		 * @return int
+		 * @param $table
+		 * @param $id
+		 * @return array
 		 */
-		public static function countQuotes($movieId) {
-			return isset(self::$movieQuotes[$movieId]) ? count(self::$movieQuotes[$movieId]) : 0;
+		private function find($table, $id) {
+			$statement = $this->prepare("SELECT * FROM {$table} WHERE id = :id");
+			$statement->bindValue(':id', $id);
+			return $statement->execute()->fetchArray(SQLITE3_ASSOC);
 		}
 
 		/**
-		 * @param $quoteId
-		 * @return int
+		 * @param $table
+		 * @return object
 		 */
-		public static function countReplies($quoteId) {
-			return isset(self::$quoteReplies[$quoteId]) ? count(self::$quoteReplies[$quoteId]) : 0;
-		}
-
-		/**
-		 * @param $quoteData
-		 * @return void
-		 */
-		public static function addQuote($quoteData) {
-			$quoteData['id']	= self::lastQuote()->id + 1;
-			$quote 				= new Quote($quoteData['quoteInput']);
-
-			self::$quotes[$quoteData['id']] = $quote;
-		}
-
-		/**
-		 * @return quote
-		 */
-		public static function lastQuote() {
-			return end(self::$quotes);
+		private function findAll($table) {
+			return $this->query("SELECT * FROM {$table}");
 		}
 	}

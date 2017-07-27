@@ -4,22 +4,20 @@
 	use GraphQL\Utils;
 
 	class Quote {
-		/** @var string */
+		/** @var integer */
 		public $id;
 
-		/** @var string */
+		/** @var integer */
 		public $characterId;
 
-		/** @var string */
+		/** @var integer */
 		public $movieId;
 
 		/** @var string */
-		public $parentId;
-
-		/** @var string */
-		public $body;
+		public $text;
 
 		/**
+		 * Quote constructor.
 		 * @param array $data
 		 */
 		public function __construct(array $data) {

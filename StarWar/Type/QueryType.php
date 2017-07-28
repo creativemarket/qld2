@@ -49,6 +49,16 @@
 						'type' => Types::listOf(Types::quote()),
 						'description' => 'Returns all quotes'
 					],
+					'topScores' => [
+						'type' => Types::listof(Types::score()),
+						'description' => 'Returns top scores (default 5)',
+						'args' => [
+							'limit' => [
+								Types::int(),
+								'defaultValue' => 5,
+							]
+						]
+					],
 					'hello' => Type::string(),
 				],
 				'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
@@ -111,6 +121,15 @@
 		 */
 		public function resolveQuotes($rootValue, $args) {
 			return $this->db()->findQuotes();
+		}
+
+		/**
+		 * @param $rootValue
+		 * @param $args
+		 * @return array
+		 */
+		public function resolveTopScores($rootValue, $args) {
+			return $this->db()->findTopScores($args['limit']);
 		}
 
 		/**

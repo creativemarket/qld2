@@ -6,6 +6,8 @@
 	use StarWar\Type\QuoteType;
 	use StarWar\Type\QuoteInputType;
 	use StarWar\Type\QueryType;
+	use StarWar\Type\ScoreType;
+	use StarWar\Type\UserType;
 	use StarWar\Type\MutationType;
 	use GraphQL\Type\Definition\ListOfType;
 	use GraphQL\Type\Definition\NonNull;
@@ -32,6 +34,10 @@
 		private static $quoteInput;
 		/** @var QueryType */
 		private static $query;
+		/** @var ScoreType */
+		private static $score;
+		/** @var UserType */
+		private static $user;
 		/** @var MutationType */
 		private static $mutation;
 
@@ -68,6 +74,20 @@
 		 */
 		public static function query() {
 			return self::$query ?: (self::$query = new QueryType());
+		}
+
+		/**
+		 * @return ScoreType
+		 */
+		public static function score() {
+			return self::$score ?: (self::$score = new ScoreType());
+		}
+
+		/**
+		 * @return UserType
+		 */
+		public static function user() {
+			return self::$user ?: (self::$user = new UserType());
 		}
 
 		/**

@@ -28,7 +28,7 @@
 		}
 
 		public function createScore($score, $userId) {
-			$this->exec("INSERT into scores (score, userId) VALUES ('" . $score . "','" . $userId . "')");
+			$this->exec("INSERT into scores (score, userId) VALUES ('{$score}','{$userId}')");
 		}
 
 		/**
@@ -117,6 +117,19 @@
 		 */
 		public function findScores() {
 			$results	= $this->findAll('scores');
+			$scores		=  [];
+			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+				array_push($scores, new Score($row));
+			}
+			return $scores;
+		}
+
+		/**
+		 * @param int
+		 * @return array
+		 */
+		public function findTopScores($limit) {
+			$results	= $this->query("SELECT * FROM scores ORDER BY score DESC LIMIT {$limit}");
 			$scores		=  [];
 			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 				array_push($scores, new Score($row));

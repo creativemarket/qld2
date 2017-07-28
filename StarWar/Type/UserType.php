@@ -5,14 +5,14 @@
 	use GraphQL\Type\Definition\ObjectType;
 	use GraphQL\Type\Definition\ResolveInfo;
 
-	class CharacterType extends ObjectType {
+	class UserType extends ObjectType {
 		/**
-		 * CharacterType constructor.
+		 * UserType constructor.
 		 */
 		public function __construct() {
 			$config = [
-				'name' => 'Character',
-				'description' => 'Classic heroes and villains',
+				'name' => 'User',
+				'description' => 'Our players',
 				'fields' => function () {
 					return [
 						'id' => Types::id(),

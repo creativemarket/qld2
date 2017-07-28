@@ -1,22 +1,24 @@
 <?php
 	namespace StarWar\Type;
 
+	use StarWar\Data\Score;
+	use StarWar\Data\DataSource;
 	use StarWar\Types;
 	use GraphQL\Type\Definition\ObjectType;
 	use GraphQL\Type\Definition\ResolveInfo;
 
-	class CharacterType extends ObjectType {
+	class ScoreType extends ObjectType {
 		/**
-		 * CharacterType constructor.
+		 * ScoreType constructor.
 		 */
 		public function __construct() {
 			$config = [
-				'name' => 'Character',
-				'description' => 'Classic heroes and villains',
+				'name' => 'Score',
+				'description' => 'Our players\' efforts',
 				'fields' => function () {
 					return [
-						'id' => Types::id(),
-						'name' => Types::string(),
+						'user' => Types::user(),
+						'score' => Types::int(),
 					];
 				},
 				'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
@@ -29,5 +31,20 @@
 				},
 			];
 			parent::__construct($config);
+		}
+
+		/**
+		 * @param Score $score
+		 * @return object
+		 */
+		public function resolveUser(Score $score) {
+			return $this->db()->findUser($score->userId);
+		}
+
+		/**
+		 * @return DataSource
+		 */
+		private function db() {
+			return new DataSource();
 		}
 	}

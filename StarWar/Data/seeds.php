@@ -171,7 +171,6 @@
 			'characterId' 	=> $charIds['Jyn Erso'],
 		],
 	];
-
 	foreach ($quotes as $quote) {
 		$args = array_map(function ($str) use ($db) {
 			return $db->escapeString($str);
@@ -182,12 +181,46 @@
 		");
 	};
 
+	$users		= ['NSJ', 'EYD', 'ODG'];
+	$userIds	= [];
+	foreach ($users as $user) {
+		$db->createUser($user);
+		$userIds[$user] = $db->lastInsertRowID();
+	}
+
+	$scores = [
+		[
+			'score' => 10,
+			'userId' => $userIds['NSJ'],
+		],
+		[
+			'score' => 3,
+			'userId' => $userIds['NSJ'],
+		],
+		[
+			'score' => 9,
+			'userId' => $userIds['EYD'],
+		],
+		[
+			'score' => 10,
+			'userId' => $userIds['EYD'],
+		],
+		[
+			'score' => 1,
+			'userId' => $userIds['ODG'],
+		],
+		[
+			'score' => 5,
+			'userId' => $userIds['ODG'],
+		],
+	];
+	foreach ($scores as $score) {
+		$db->createScore($score['score'], $score['userId']);
+	}
+
 	// Print results
-	$movies = $db->query('SELECT count(*) FROM movies');
-	print_r($movies->fetchArray(SQLITE3_ASSOC));
-
-	$characters = $db->query('SELECT count(*) FROM characters');
-	print_r($characters->fetchArray(SQLITE3_ASSOC));
-
-	$quotes = $db->query('SELECT count(*) FROM quotes');
-	print_r($quotes->fetchArray(SQLITE3_ASSOC));
+	print_r($db->findMovies());
+	print_r($db->findCharacters());
+	print_r($db->findQuotes());
+	print_r($db->findUsers());
+	print_r($db->findScores());

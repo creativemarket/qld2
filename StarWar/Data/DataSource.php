@@ -20,6 +20,18 @@
 		}
 
 		/**
+		 * @param string $userName
+		 * @return void
+		 */
+		public function createUser($userName) {
+			$this->exec("INSERT into users (name) VALUES ('$userName')");
+		}
+
+		public function createScore($score, $userId) {
+			$this->exec("INSERT into scores (score, userId) VALUES ('" . $score . "','" . $userId . "')");
+		}
+
+		/**
 		 * @param $id
 		 * @return character|null
 		 */
@@ -98,6 +110,30 @@
 				array_push($quotes, new Quote($row));
 			}
 			return $quotes;
+		}
+
+		/**
+		 * @return array
+		 */
+		public function findScores() {
+			$results	= $this->findAll('scores');
+			$scores		=  [];
+			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+				array_push($scores, new Score($row));
+			}
+			return $scores;
+		}
+
+		/**
+		 * @return array
+		 */
+		public function findUsers() {
+			$results	= $this->findAll('users');
+			$users		=  [];
+			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+				array_push($users, new User($row));
+			}
+			return $users;
 		}
 
 		/**

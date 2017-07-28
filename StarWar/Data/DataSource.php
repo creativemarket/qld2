@@ -21,14 +21,21 @@
 
 		/**
 		 * @param string $userName
-		 * @return void
+		 * @return int
 		 */
 		public function createUser($userName) {
 			$this->exec("INSERT into users (name) VALUES ('$userName')");
+			return $this->lastInsertRowID();
 		}
 
+		/**
+		 * @param $score
+		 * @param $userId
+		 * @return int
+		 */
 		public function createScore($score, $userId) {
 			$this->exec("INSERT into scores (score, userId) VALUES ('{$score}','{$userId}')");
+			return $this->lastInsertRowID();
 		}
 
 		/**

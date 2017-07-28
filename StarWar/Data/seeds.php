@@ -42,6 +42,7 @@
 
 	$db->exec("
 		CREATE TABLE scores (
+			`id`		INTEGER PRIMARY KEY AUTOINCREMENT,
     		`score`		INTEGER,
     		`userId`	INTEGER REFERENCES users(id)
 		);"

@@ -5,6 +5,9 @@
 
 	class Score {
 		/** @var integer */
+		public $id;
+
+		/** @var integer */
 		public $score;
 
 		/** @var integer */

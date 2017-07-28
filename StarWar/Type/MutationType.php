@@ -14,29 +14,25 @@
 			$config = [
 				'name' => 'Mutation',
 				'fields' => [
-					'createQuote' => [
-						'type' => Types::quote(),
-						'description' => 'Returns newly created quote',
+					'createScore' => [
+						'type' => Types::score(),
+						'description' => 'Create a new score',
 						'args' => [
-							'quoteInput' => Types::quoteInput(),
-							'movieId' => Types::id(),
-							'body' => Types::string(),
+							'scoreInput' => Types::scoreInput(),
 						],
 					],
-					'deprecatedField' => [
-						'type' => Types::string(),
-						'deprecationReason' => 'This field is deprecated!',
-					],
-					'fieldWithException' => [
-						'type' => Types::string(),
-						'resolve' => function () {
-							throw new \Exception("Exception message thrown in field resolver");
-						},
+					'createUser' => [
+						'type' => Types::user(),
+						'description' => 'Create a new user',
+						'args' => [
+							'userName' => Types::string(),
+						],
 					],
 				],
-				'resolveField' => function ($val, $args, $context, ResolveInfo $info) {
-					return $this->{$info->fieldName}($val, $args, $context, $info);
-				}
+				'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
+					$method = 'resolve' . ucfirst($info->fieldName);
+					return $this->{$method}($value, $args, $context, $info);
+				},
 			];
 			parent::__construct($config);
 		}
@@ -44,17 +40,23 @@
 		/**
 		 * @param $rootValue
 		 * @param $args
-		 * @return \StarWar\Data\quote
+		 * @return null|\StarWar\Data\score
 		 */
-		public function createQuote($rootValue, $args) {
-			DataSource::addQuote($args);
-			return DataSource::lastQuote();
+		public function resolveCreateScore($rootValue, $args) {
+			$scoreInput = $args['scoreInput'];
+			$scoreId = $this->db()->createScore($scoreInput['score'], $scoreInput['userId']);
+			return $this->db()->findScore($scoreId);
+		}
+
+		public function resolveCreateUser($rootValue, $args) {
+			$userId = $this->db()->createUser($args['userName']);
+			return $this->db()->findUser($userId);
 		}
 
 		/**
-		 * @return string
+		 * @return DataSource
 		 */
-		public function deprecatedField() {
-			return 'You can request deprecated field, but it is not displayed in auto-generated documentation by default.';
+		private function db() {
+			return new DataSource();
 		}
 	}

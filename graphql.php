@@ -5,17 +5,12 @@
 
 	use StarWar\Types;
 	use StarWar\AppContext;
-	use StarWar\Data\DataSource;
 	use GraphQL\Schema;
 	use GraphQL\GraphQL;
 
 	try {
-		// Initialize our fake data source
-		DataSource::init();
-
 		// Prepare context that will be available in all field resolvers (as 3rd argument):
 		$appContext				= new AppContext();
-		$appContext->viewer		= DataSource::findCharacter('1');
 		$appContext->rootUrl	= 'http://localhost:8080';
 		$appContext->request	= $_REQUEST;
 

@@ -6,6 +6,8 @@
 	use StarWar\Type\QuoteType;
 	use StarWar\Type\ScoreInputType;
 	use StarWar\Type\QueryType;
+	use StarWar\Type\QuizQuestionType;
+	use StarWar\Type\QuizAnswerType;
 	use StarWar\Type\ScoreType;
 	use StarWar\Type\UserType;
 	use StarWar\Type\MutationType;
@@ -35,6 +37,10 @@
 		private static $scoreInput;
 		/** @var QueryType */
 		private static $query;
+		/** @var QuizQuestionType */
+		private static $quizQuestion;
+		/** @var QuizAnswerType */
+		private static $quizAnswer;
 		/** @var ScoreType */
 		private static $score;
 		/** @var UserType */
@@ -68,6 +74,20 @@
 		 */
 		public static function query() {
 			return self::$query ?: (self::$query = new QueryType());
+		}
+
+		/**
+		 * @return QuizQuestionType
+		 */
+		public static function quizQuestion() {
+			return self::$quizQuestion ?: (self::$quizQuestion = new QuizQuestionType());
+		}
+
+		/**
+		 * @return QuizAnswerType
+		 */
+		public static function quizAnswer() {
+			return self::$quizAnswer ?: (self::$quizAnswer = new QuizAnswerType());
 		}
 
 		/**

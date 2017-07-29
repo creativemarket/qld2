@@ -34,7 +34,7 @@
 		 * @return int
 		 */
 		public function createScore($score, $userId) {
-			$this->exec("INSERT into scores (score, userId) VALUES ('{$score}','{$userId}')");
+			$this->exec("INSERT into scores (score, userId) VALUES ('$score','$userId')");
 			return $this->lastInsertRowID();
 		}
 
@@ -136,7 +136,7 @@
 		 * @return array
 		 */
 		public function findTopScores($limit) {
-			$results	= $this->query("SELECT * FROM scores ORDER BY score DESC LIMIT {$limit}");
+			$results	= $this->query("SELECT * FROM scores ORDER BY score DESC LIMIT $limit");
 			$scores		=  [];
 			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 				array_push($scores, new Score($row));
@@ -162,7 +162,7 @@
 		 * @return array
 		 */
 		private function find($table, $id) {
-			$statement = $this->prepare("SELECT * FROM {$table} WHERE id = :id");
+			$statement = $this->prepare("SELECT * FROM $table WHERE id = :id");
 			$statement->bindValue(':id', $id);
 			return $statement->execute()->fetchArray(SQLITE3_ASSOC);
 		}
@@ -172,6 +172,6 @@
 		 * @return object
 		 */
 		private function findAll($table) {
-			return $this->query("SELECT * FROM {$table}");
+			return $this->query("SELECT * FROM $table");
 		}
 	}

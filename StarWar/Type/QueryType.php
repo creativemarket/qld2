@@ -3,6 +3,8 @@
 
 	use StarWar\AppContext;
 	use StarWar\Data\DataSource;
+	use StarWar\Data\QuizQuestion;
+	use StarWar\Data\Quote;
 	use StarWar\Types;
 	use GraphQL\Type\Definition\ObjectType;
 	use GraphQL\Type\Definition\ResolveInfo;
@@ -37,6 +39,10 @@
 					'movies' => [
 						'type' => Types::listOf(Types::movie()),
 						'description' => 'Returns movies',
+					],
+					'quiz' => [
+						'type' => Types::listOf(Types::quizQuestion()),
+						'description' => 'Returns quiz questions and answers',
 					],
 					'quote' => [
 						'type' => Types::quote(),
@@ -121,6 +127,22 @@
 		 */
 		public function resolveQuotes($rootValue, $args) {
 			return $this->db()->findQuotes();
+		}
+
+		/**
+		 * @param $rootValue
+		 * @param $args
+		 * @return array
+		 */
+		public function resolveQuiz($rootValue, $args) {
+			$results = $this->db()->query("SELECT * FROM quotes ORDER BY RANDOM() LIMIT 10");
+			$quizQuotes	=  [];
+			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+				array_push($quizQuotes, new QuizQuestion(
+					['quote' => new Quote($row)]
+				));
+			}
+			return $quizQuotes;
 		}
 
 		/**

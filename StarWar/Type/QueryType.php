@@ -60,7 +60,7 @@
 						'description' => 'Returns top scores (default 5)',
 						'args' => [
 							'limit' => [
-								Types::int(),
+								'type' => Types::int(),
 								'defaultValue' => 5,
 							]
 						]

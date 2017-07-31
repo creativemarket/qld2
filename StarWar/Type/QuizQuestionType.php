@@ -57,7 +57,7 @@
 
 			while ($row = $randCharacters->fetchArray(SQLITE3_ASSOC)) {
 				if ($row['id'] !== $characterId && count($characters) < 3) {
-					array_push($characters , new QuizAnswer(
+					array_push($characters, new QuizAnswer(
 						['answer' => $row['name'] , 'isCorrect' => false])
 					);
 				}
@@ -78,8 +78,8 @@
 
 			while ($row = $randMovies->fetchArray(SQLITE3_ASSOC)) {
 				if ($row['id'] !== $movieId && count($movies) < 3) {
-					array_push($movies , new QuizAnswer(
-							['answer' => $row['title'] , 'isCorrect' => false])
+					array_push($movies, new QuizAnswer(
+						['answer' => $row['title'] , 'isCorrect' => false])
 					);
 				}
 			}

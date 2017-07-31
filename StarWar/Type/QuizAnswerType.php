@@ -1,8 +1,6 @@
 <?php
 	namespace StarWar\Type;
 
-	use StarWar\Data\QuizAnswer;
-	use StarWar\Data\DataSource;
 	use StarWar\Types;
 	use GraphQL\Type\Definition\ObjectType;
 	use GraphQL\Type\Definition\ResolveInfo;

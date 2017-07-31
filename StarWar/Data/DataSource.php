@@ -10,7 +10,7 @@
 	 */
 	class DataSource extends \SQLite3 {
 		/** location of sqlite3 db */
-		CONST FILENAME = 'starwar.db';
+		const FILENAME = 'starwar.db';
 
 		/**
 		 * DataSource constructor.
@@ -74,7 +74,7 @@
 			return new Score($score);
 		}
 
-		/*
+		/**
 		 * @param $id
 		 * @return user|null
 		 */
@@ -112,7 +112,7 @@
 		 */
 		public function findQuotes() {
 			$results	= $this->findAll('quotes');
-			$quotes		=  [];
+			$quotes		= [];
 			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 				array_push($quotes, new Quote($row));
 			}
@@ -124,7 +124,7 @@
 		 */
 		public function findScores() {
 			$results	= $this->findAll('scores');
-			$scores		=  [];
+			$scores		= [];
 			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 				array_push($scores, new Score($row));
 			}
@@ -137,7 +137,7 @@
 		 */
 		public function findTopScores($limit) {
 			$results	= $this->query("SELECT * FROM scores ORDER BY score DESC LIMIT $limit");
-			$scores		=  [];
+			$scores		= [];
 			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 				array_push($scores, new Score($row));
 			}
@@ -149,7 +149,7 @@
 		 */
 		public function findUsers() {
 			$results	= $this->findAll('users');
-			$users		=  [];
+			$users		= [];
 			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 				array_push($users, new User($row));
 			}

@@ -19,23 +19,23 @@
 			$raw	= file_get_contents('php://input') ?: '';
 			$data	= json_decode($raw, true);
 		} else {
-			$data = $_REQUEST;
+			$data	= $_REQUEST;
 		}
 
 		$data += ['query' => null, 'variables' => null];
 
-		if (null === $data['query']) {
-			$data['query'] = '{hello}';
+		$result = null;
+		$query	= $data['query'];
+		if (null !== $query) {
+			// GraphQL schema to be passed to query executor:
+			$schema = new Schema([
+				'query'    => Types::query(),
+				'mutation' => Types::mutation(),
+			]);
+
+			$args	= json_decode($data['variables'], true);
+			$result	= GraphQL::execute($schema, $query, null, $appContext, $args);
 		}
-
-		// GraphQL schema to be passed to query executor:
-		$schema = new Schema([
-			'query'		=> Types::query(),
-			'mutation'	=> Types::mutation(),
-		]);
-
-		$args	= json_decode($data['variables'], true);
-		$result	= GraphQL::execute($schema, $data['query'], null, $appContext, $args);
 
 		$httpStatus = 200;
 	} catch (\Exception $e) {
@@ -47,5 +47,9 @@
 			],
 		];
 	}
-	header('Content-Type: application/json', true, $httpStatus);
-	echo json_encode($result);
+	if ($result !== null) {
+		header('Content-Type: application/json', true, $httpStatus);
+		echo json_encode($result);
+	} else {
+		header("Location: $appContext->rootUrl");
+	}

@@ -14,9 +14,14 @@ Install packages:
 npm install
 ```
 
+Seed the database: 
+```
+php -f StarWar/Data/seeds.php
+```
+
 Run the graph server via command line: 
 ```
-php -S localhost:8080 ./graphql.php
+php -S localhost:8080 
 ```
 
 Run the dev server separately (both servers runnning):
@@ -29,7 +34,7 @@ npm run server
 
 Either way, it will allow you to play around with the API without any other tools, AND it parses the GraphQL types and provides documentation of the schema, which is super fancy.
 
-Set your server to `http://localhost:8080` 
+Set your server to `http://localhost:8080/graphql.php` 
 
 ## Queries
 

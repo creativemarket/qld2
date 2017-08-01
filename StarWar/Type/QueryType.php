@@ -43,6 +43,12 @@
 					'quiz' => [
 						'type' => Types::listOf(Types::quizQuestion()),
 						'description' => 'Returns quiz questions and answers',
+						'args' => [
+							'limit' => [
+								'type' => Types::int(),
+								'defaultValue' => 10,
+							],
+						],
 					],
 					'quote' => [
 						'type' => Types::quote(),
@@ -135,14 +141,7 @@
 		 * @return array
 		 */
 		public function resolveQuiz($rootValue, $args) {
-			$results = $this->db()->query("SELECT * FROM quotes ORDER BY RANDOM() LIMIT 10");
-			$quizQuotes	=  [];
-			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
-				array_push($quizQuotes, new QuizQuestion(
-					['quote' => new Quote($row)]
-				));
-			}
-			return $quizQuotes;
+			return $this->db()->findQuizQuestions($args['limit']);;
 		}
 
 		/**

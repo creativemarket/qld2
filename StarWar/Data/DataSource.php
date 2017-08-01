@@ -156,6 +156,17 @@
 			return $users;
 		}
 
+		public function findQuizQuestions($limit) {
+			$results		= $this->query("SELECT * FROM quotes ORDER BY RANDOM() LIMIT $limit");
+			$quizQuestions	= [];
+			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+				array_push($quizQuestions, new QuizQuestion(
+					['quote' => new Quote($row)]
+				));
+			}
+			return $quizQuestions;
+		}
+
 		/**
 		 * @param $table
 		 * @param $id

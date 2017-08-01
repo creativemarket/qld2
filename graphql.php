@@ -15,17 +15,14 @@
 		$appContext->request	= $_REQUEST;
 
 		// Parse incoming query and variables
-		if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
-			$raw	= file_get_contents('php://input') ?: '';
-			$data	= json_decode($raw, true);
-		} else {
-			$data	= $_REQUEST;
-		}
+		$raw	= file_get_contents('php://input') ?: '';
+		$data	= json_decode($raw, true);
 
 		$data += ['query' => null, 'variables' => null];
 
 		$result = null;
 		$query	= $data['query'];
+
 		if (null !== $query) {
 			// GraphQL schema to be passed to query executor:
 			$schema = new Schema([
@@ -37,7 +34,7 @@
 			$result	= GraphQL::execute($schema, $query, null, $appContext, $args);
 		}
 
-		$httpStatus = 200;
+		$httpStatus = array_key_exists('errors', $result) ? 400 : 200;
 	} catch (\Exception $e) {
 		$httpStatus = 500;
 
@@ -47,9 +44,6 @@
 			],
 		];
 	}
-	if ($result !== null) {
-		header('Content-Type: application/json', true, $httpStatus);
-		echo json_encode($result);
-	} else {
-		header("Location: $appContext->rootUrl");
-	}
+
+	header('Content-Type: application/json', true, $httpStatus);
+	echo json_encode($result);

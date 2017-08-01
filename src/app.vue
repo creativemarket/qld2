@@ -11,8 +11,10 @@ export default {
         // GraphQL query
         quiz: {
             query: gql`query quiz {
-                quote {
-                    text
+                quiz {
+					quote {
+						text
+					}
                 }
             }`,
         }

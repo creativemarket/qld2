@@ -1,6 +1,6 @@
 <?php
 // Test this using following command
-// php -S localhost:8080 ./graphql.php
+// php -S localhost:8080
 	require 'vendor/autoload.php';
 
 	use StarWar\Types;
@@ -15,16 +15,19 @@
 		$appContext->request	= $_REQUEST;
 
 		// Parse incoming query and variables
-		$raw	= file_get_contents('php://input') ?: '';
-		$data	= json_decode($raw, true);
+		if ($raw = file_get_contents('php://input')) {
+			$data = json_decode($raw, true);
+		} else {
+			$data = $_REQUEST;
+		}
 
 		$data += ['query' => null, 'variables' => null];
 
-		$result = null;
+		$result = [];
 		$query	= $data['query'];
 
 		if (null !== $query) {
-			// GraphQL schema to be passed to query executor:
+			// GraphQL schema to be passed to query executor
 			$schema = new Schema([
 				'query'    => Types::query(),
 				'mutation' => Types::mutation(),

@@ -49,4 +49,5 @@
 	}
 
 	header('Content-Type: application/json', true, $httpStatus);
+	header('Access-Control-Allow-Origin: *');
 	echo json_encode($result);

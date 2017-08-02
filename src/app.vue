@@ -5,6 +5,10 @@ export default {
     data() {
         return {
             quiz: '',
+            score: 0,
+            total: 0,
+            message: {},
+            completed: false,
         };
     },
     apollo: {

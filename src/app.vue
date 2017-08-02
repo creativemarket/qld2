@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 export default {
     data() {
         return {
-            quiz: '',
+            quiz: this.$root.$data,
             score: 0,
             total: 0,
             message: {},
@@ -22,6 +22,9 @@ export default {
                 }
             }`,
         }
+    },
+    mounted() {
+        console.log(this.$root.$data);
     },
 }
 </script>

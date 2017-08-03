@@ -1,9 +1,7 @@
 <script>
-import answer from '../mixins/answer';
-
 export default {
     props: {
-        card: {
+        quiz: {
             type: Object,
             required: true,
         },
@@ -14,19 +12,21 @@ export default {
             hasAnswered: false,
         };
     },
-    mixins: [answer],
 }
 </script>
 
 <template>
     <div class="card">
-        <h1>{{ card.quote }}</h1>
-        <div v-if="!bonus">
-            <a class="answer" v-for="(character, i) in card.characters" v-bind:key="i" v-on:click="answerClick(character.isCorrect)"></a>
+        <h1>"{{ quiz.quote.text }}"</h1>
+        <div class="answers characters" v-if="!bonus">
+            <h2>Who said it?...</h2>
+            <a class="answer" v-for="(character, i) in quiz.characters" v-bind:key="i">{{ character.answer }}</a>
         </div>
-        <div v-if="bonus">
-            <a class="answer" v-for="(movie, i) in card.movie" v-bind:key="i" v-on:click="answerClick(movie.isCorrect)"></a>
+        <div class="answers movies" v-if="bonus">
+            <h2>Which movie did this quote belong to?...</h2>
+            <a class="answer" v-for="(movie, i) in quiz.movies" v-bind:key="i">{{ movie.answer }}</a>
         </div>
+        <br>
     </div>
 </template>
 

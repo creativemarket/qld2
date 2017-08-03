@@ -1,14 +1,18 @@
 <script>
 import gql from 'graphql-tag';
+import Score from './components/score.vue';
+import Card from './components/card/card.vue';
 
 export default {
     data() {
+        console.log(this.$apollo);
         return {
-            quiz: this.$root.$data,
+            quiz: null,
             score: 0,
             total: 0,
             message: {},
             completed: false,
+            current: 1,
         };
     },
     apollo: {
@@ -16,15 +20,33 @@ export default {
         quiz: {
             query: gql`query quiz {
                 quiz {
-					quote {
-						text
-					}
+                    quote {
+                        text
+                    }
+                    characters {
+                        answer
+                        isCorrect
+                    }
+                    movies {
+                        answer
+                        isCorrect
+                    }
                 }
             }`,
         }
     },
-    mounted() {
-
+    components: {
+        'card': Card,
+        'score': Score,
+    },
+    computed: {
+    },
+    methods: {
+        next() {
+            if (this.current+1 < this.quiz.length) {
+                this.current++;
+            }
+        },
     },
 }
 </script>
@@ -32,9 +54,8 @@ export default {
 <template>
     <div class="">
         <h1>Welcome to Star War</h1>
-        <ul>
-            <li v-for="q in quiz">{{ q.quote.text }}</li>
-        </ul>
+        <score :score="this.score" :total="this.total"></score>
+        <card v-for="(q, i) in quiz" :quiz="q" v-show="i === current" v-bind:key="i"></card>
     </div>
 </template>
 

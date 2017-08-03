@@ -24,7 +24,7 @@ export default {
         }
     },
     mounted() {
-        console.log(this.$root.$data);
+
     },
 }
 </script>
@@ -32,7 +32,9 @@ export default {
 <template>
     <div class="">
         <h1>Welcome to Star War</h1>
-        <h2>{{ quiz }}</h2>
+        <ul>
+            <li v-for="q in quiz">{{ q.quote.text }}</li>
+        </ul>
     </div>
 </template>
 

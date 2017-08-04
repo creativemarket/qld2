@@ -1,4 +1,7 @@
 <script>
+import { EventBus } from '../../main.js';
+import answer from '../../mixins/answer.js';
+
 export default {
     props: {
         quiz: {
@@ -12,6 +15,15 @@ export default {
             hasAnswered: false,
         };
     },
+    mixins: [answer],
+    mounted() {
+        EventBus.$on('show:movie', bool => { this.showMovie(bool) });
+    },
+    methods: {
+        showMovie(bool) {
+            this.bonus = bool;
+        },
+    },
 }
 </script>
 
@@ -20,11 +32,11 @@ export default {
         <h1>"{{ quiz.quote.text }}"</h1>
         <div class="answers characters" v-if="!bonus">
             <h2>Who said it?...</h2>
-            <a class="answer" v-for="(character, i) in quiz.characters" v-bind:key="i">{{ character.answer }}</a>
+            <a class="answer" v-for="(character, i) in quiz.characters" v-bind:key="i" v-on:click="answerClick(character.isCorrect, 'character')">{{ character.answer }}</a>
         </div>
         <div class="answers movies" v-if="bonus">
             <h2>Which movie did this quote belong to?...</h2>
-            <a class="answer" v-for="(movie, i) in quiz.movies" v-bind:key="i">{{ movie.answer }}</a>
+            <a class="answer" v-for="(movie, i) in quiz.movies" v-bind:key="i" v-on:click="answerClick(movie.isCorrect, 'movie')">{{ movie.answer }}</a>
         </div>
         <br>
     </div>

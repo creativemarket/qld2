@@ -14,6 +14,8 @@ import App from './app.vue';
 import { ApolloClient, createNetworkInterface } from 'apollo-client';
 import VueApollo from 'vue-apollo';
 
+export const EventBus = new Vue();
+
 // Create the Apollo client
 const apolloClient = new ApolloClient({
     networkInterface: createNetworkInterface({

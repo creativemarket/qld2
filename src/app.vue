@@ -8,14 +8,14 @@ import Leaderboard from './components/leaderboard.vue';
 
 export default {
     data() {
-        console.log(this.$apollo);
         return {
             quiz: null,
             score: 0,
             total: 0,
             message: {},
-            completed: false,
             current: 1,
+            completed: false,
+            boardVisible: false,
         };
     },
     apollo: {
@@ -36,7 +36,7 @@ export default {
                     }
                 }
             }`,
-        }
+        },
     },
     components: {
         'card': Card,
@@ -48,19 +48,30 @@ export default {
         EventBus.$on('progress:quiz', () => { this.next() });
         EventBus.$on('update:score', amt => { this.updateScore(amt) });
         EventBus.$on('show:message', payload => { this.showMessage(payload) });
+        EventBus.$on('show:leaderboard', (bool) => { this.toggleLeaderBoard(bool) });
     },
     methods: {
         next() {
-            if (this.current+1 < this.quiz.length) {
+            if (this.current+1 <= this.quiz.length) {
                 this.current++;
                 EventBus.$emit('show:movie', false);
+
+                // Quiz complete
+                if (this.current == this.quiz.length) {
+                    this.completed = true;
+                    this.toggleLeaderBoard(true);
+                }
             }
+
         },
         updateScore(amt) {
             this.score = this.score + amt;
         },
         showMessage(payload) {
             this.message = payload;
+        },
+        toggleLeaderBoard(bool) {
+            this.boardVisible = bool;
         },
     },
 }
@@ -72,6 +83,7 @@ export default {
         <score :score="this.score" :total="this.total"></score>
         <message :message="this.message"></message>
         <card v-for="(q, i) in quiz" :quiz="q" v-show="i === current" v-bind:key="i"></card>
+        <leaderboard v-if="this.boardVisible" :userScore="this.score" :isComplete="this.completed"></leaderboard>
     </div>
 </template>
 

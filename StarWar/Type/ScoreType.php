@@ -17,7 +17,7 @@
 				'description' => 'Our players\' efforts',
 				'fields' => function () {
 					return [
-						'user' => Types::user(),
+						'userName' => Types::string(),
 						'score' => Types::int(),
 					];
 				},
@@ -31,14 +31,6 @@
 				},
 			];
 			parent::__construct($config);
-		}
-
-		/**
-		 * @param Score $score
-		 * @return object
-		 */
-		public function resolveUser(Score $score) {
-			return $this->db()->findUser($score->userId);
 		}
 
 		/**

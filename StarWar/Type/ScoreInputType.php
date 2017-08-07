@@ -14,9 +14,9 @@
 				'name' => 'ScoreInput',
 				'fields' => function () {
 					return [
-						'userId' => [
-							'type' => Types::id(),
-							'description' => 'User id for new Score',
+						'userName' => [
+							'type' => Types::string(),
+							'description' => 'User name for new Score',
 						],
 						'score' => [
 							'type' => Types::int(),

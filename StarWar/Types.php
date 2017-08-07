@@ -9,9 +9,7 @@
 	use StarWar\Type\QuizQuestionType;
 	use StarWar\Type\QuizAnswerType;
 	use StarWar\Type\ScoreType;
-	use StarWar\Type\UserType;
 	use StarWar\Type\MutationType;
-	use StarWar\Type\MovieEnum;
 	use GraphQL\Type\Definition\ListOfType;
 	use GraphQL\Type\Definition\NonNull;
 	use GraphQL\Type\Definition\Type;
@@ -43,8 +41,6 @@
 		private static $quizAnswer;
 		/** @var ScoreType */
 		private static $score;
-		/** @var UserType */
-		private static $user;
 		/** @var MutationType */
 		private static $mutation;
 
@@ -102,13 +98,6 @@
 		 */
 		public static function score() {
 			return self::$score ?: (self::$score = new ScoreType());
-		}
-
-		/**
-		 * @return UserType
-		 */
-		public static function user() {
-			return self::$user ?: (self::$user = new UserType());
 		}
 
 		/**

@@ -34,17 +34,10 @@
 	);
 
 	$db->exec("
-		CREATE TABLE users (
-			`id`	INTEGER PRIMARY KEY AUTOINCREMENT,
-    		`name`	VARCHAR NOT NULL UNIQUE
-		);"
-	);
-
-	$db->exec("
 		CREATE TABLE scores (
 			`id`		INTEGER PRIMARY KEY AUTOINCREMENT,
     		`score`		INTEGER,
-    		`userId`	INTEGER REFERENCES users(id)
+    		`userName`	VARCHAR NOT NULL
 		);"
 	);
 
@@ -182,46 +175,38 @@
 		");
 	};
 
-	$users		= ['NSJ', 'EYD', 'ODG'];
-	$userIds	= [];
-	foreach ($users as $user) {
-		$db->createUser($user);
-		$userIds[$user] = $db->lastInsertRowID();
-	}
-
 	$scores = [
 		[
 			'score' => 10,
-			'userId' => $userIds['NSJ'],
+			'userName' => 'NSJ',
 		],
 		[
 			'score' => 3,
-			'userId' => $userIds['NSJ'],
+			'userName' => 'NSJ',
 		],
 		[
 			'score' => 9,
-			'userId' => $userIds['EYD'],
+			'userName' => 'EYD',
 		],
 		[
 			'score' => 10,
-			'userId' => $userIds['EYD'],
+			'userName' => 'EYD',
 		],
 		[
 			'score' => 1,
-			'userId' => $userIds['ODG'],
+			'userName' => 'ODG',
 		],
 		[
 			'score' => 5,
-			'userId' => $userIds['ODG'],
+			'userName' => 'ODG',
 		],
 	];
 	foreach ($scores as $score) {
-		$db->createScore($score['score'], $score['userId']);
+		$db->createScore($score['score'], $score['userName']);
 	}
 
 	// Print results
-	print_r($db->findMovies());
-	print_r($db->findCharacters());
-	print_r($db->findQuotes());
-	print_r($db->findUsers());
+//	print_r($db->findMovies());
+//	print_r($db->findCharacters());
+//	print_r($db->findQuotes());
 	print_r($db->findScores());

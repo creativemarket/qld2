@@ -21,13 +21,6 @@
 							'scoreInput' => Types::scoreInput(),
 						],
 					],
-					'createUser' => [
-						'type' => Types::user(),
-						'description' => 'Create a new user',
-						'args' => [
-							'userName' => Types::string(),
-						],
-					],
 				],
 				'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
 					$method = 'resolve' . ucfirst($info->fieldName);
@@ -44,13 +37,8 @@
 		 */
 		public function resolveCreateScore($rootValue, $args) {
 			$scoreInput = $args['scoreInput'];
-			$scoreId = $this->db()->createScore($scoreInput['score'], $scoreInput['userId']);
+			$scoreId = $this->db()->createScore($scoreInput['score'], $scoreInput['userName']);
 			return $this->db()->findScore($scoreId);
-		}
-
-		public function resolveCreateUser($rootValue, $args) {
-			$userId = $this->db()->createUser($args['userName']);
-			return $this->db()->findUser($userId);
 		}
 
 		/**

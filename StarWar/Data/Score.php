@@ -10,8 +10,8 @@
 		/** @var integer */
 		public $score;
 
-		/** @var integer */
-		public $userId;
+		/** @var string */
+		public $userName;
 
 		/**
 		 * Score constructor.

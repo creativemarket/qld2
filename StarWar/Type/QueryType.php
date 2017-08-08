@@ -1,14 +1,10 @@
 <?php
 	namespace StarWar\Type;
 
-	use StarWar\AppContext;
 	use StarWar\Data\DataSource;
-	use StarWar\Data\QuizQuestion;
-	use StarWar\Data\Quote;
 	use StarWar\Types;
 	use GraphQL\Type\Definition\ObjectType;
 	use GraphQL\Type\Definition\ResolveInfo;
-	use GraphQL\Type\Definition\Type;
 
 	class QueryType extends ObjectType {
 		/**
@@ -17,7 +13,7 @@
 		public function __construct() {
 			$config = [
 				'name' => 'Query',
-				'fields'=> [
+				'fields' => [
 					'character' => [
 						'type' => Types::character(),
 						'description' => 'Returns character by id',
@@ -59,7 +55,7 @@
 					],
 					'quotes' => [
 						'type' => Types::listOf(Types::quote()),
-						'description' => 'Returns all quotes'
+						'description' => 'Returns all quotes',
 					],
 					'topScores' => [
 						'type' => Types::listof(Types::score()),
@@ -68,10 +64,9 @@
 							'limit' => [
 								'type' => Types::int(),
 								'defaultValue' => 5,
-							]
-						]
+							],
+						],
 					],
-					'hello' => Type::string(),
 				],
 				'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
 					$method = 'resolve' . ucfirst($info->fieldName);
@@ -91,11 +86,9 @@
 		}
 
 		/**
-		 * @param $rootValue
-		 * @param $args
 		 * @return array
 		 */
-		public function resolveCharacters($rootValue, $args) {
+		public function resolveCharacters() {
 			return $this->db()->findCharacters();
 		}
 
@@ -109,11 +102,9 @@
 		}
 
 		/**
-		 * @param $rootValue
-		 * @param $args
 		 * @return array
 		 */
-		public function resolveMovies($rootValue, $args) {
+		public function resolveMovies() {
 			return $this->db()->findMovies();
 		}
 
@@ -127,11 +118,9 @@
 		}
 
 		/**
-		 * @param $rootValue
-		 * @param $args
 		 * @return array
 		 */
-		public function resolveQuotes($rootValue, $args) {
+		public function resolveQuotes() {
 			return $this->db()->findQuotes();
 		}
 
@@ -141,7 +130,7 @@
 		 * @return array
 		 */
 		public function resolveQuiz($rootValue, $args) {
-			return $this->db()->findQuizQuestions($args['limit']);;
+			return $this->db()->findQuizQuestions($args['limit']);
 		}
 
 		/**
@@ -151,13 +140,6 @@
 		 */
 		public function resolveTopScores($rootValue, $args) {
 			return $this->db()->findTopScores($args['limit']);
-		}
-
-		/**
-		 * @return string
-		 */
-		public function resolveHello() {
-			return 'Your graphql-php endpoint is ready! Use GraphiQL to browse API';
 		}
 
 		/**

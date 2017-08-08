@@ -1,8 +1,6 @@
 <?php
 	namespace StarWar\Type;
 
-	use StarWar\Data\Score;
-	use StarWar\Data\DataSource;
 	use StarWar\Types;
 	use GraphQL\Type\Definition\ObjectType;
 	use GraphQL\Type\Definition\ResolveInfo;
@@ -17,7 +15,7 @@
 				'description' => 'Our players\' efforts',
 				'fields' => function () {
 					return [
-						'user' => Types::user(),
+						'userName' => Types::string(),
 						'score' => Types::int(),
 					];
 				},
@@ -31,20 +29,5 @@
 				},
 			];
 			parent::__construct($config);
-		}
-
-		/**
-		 * @param Score $score
-		 * @return object
-		 */
-		public function resolveUser(Score $score) {
-			return $this->db()->findUser($score->userId);
-		}
-
-		/**
-		 * @return DataSource
-		 */
-		private function db() {
-			return new DataSource();
 		}
 	}

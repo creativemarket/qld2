@@ -206,7 +206,7 @@
 	}
 
 	// Print results
-//	print_r($db->findMovies());
-//	print_r($db->findCharacters());
-//	print_r($db->findQuotes());
+	print_r($db->findMovies());
+	print_r($db->findCharacters());
+	print_r($db->findQuotes());
 	print_r($db->findScores());

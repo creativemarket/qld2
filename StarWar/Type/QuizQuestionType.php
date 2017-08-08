@@ -4,7 +4,9 @@
 	use StarWar\Data\QuizAnswer;
 	use StarWar\Data\QuizQuestion;
 	use StarWar\Data\DataSource;
+	use StarWar\Data\Buffer\Character;
 	use StarWar\Types;
+	use GraphQL\Deferred;
 	use GraphQL\Type\Definition\ObjectType;
 	use GraphQL\Type\Definition\ResolveInfo;
 
@@ -46,23 +48,36 @@
 
 		/**
 		 * @param QuizQuestion $question
-		 * @return array
+		 * @return Deferred
 		 */
 		public function resolveCharacters(QuizQuestion $question) {
-			$characterId = $question->quote->characterId;
-			$character = $this->db()->findCharacter($characterId);
-			$characters = [new QuizAnswer(['answer' => $character->name, 'isCorrect' => true])];
+			$quote			= $question->quote;
+			$characterId	= $quote->characterId;
+			$characterIds	= [$characterId];
 
-			$randCharacters = $this->db()->query("SELECT * FROM characters ORDER BY RANDOM() LIMIT 3");
-
-			while ($row = $randCharacters->fetchArray(SQLITE3_ASSOC)) {
-				if ($row['id'] !== $characterId && count($characters) < 3) {
-					array_push($characters, new QuizAnswer(
-						['answer' => $row['name'] , 'isCorrect' => false])
-					);
-				}
+			while (count(array_unique($characterIds)) < 3) {
+//				Not ideal, but for the moment we know there are only 11 Characters in the db
+				array_push($characterIds, rand(1, 11));
 			}
-			return $characters;
+			$characterIds = array_unique($characterIds);
+
+			Character::add($quote->id, $characterIds);
+
+			return new Deferred(function () use ($quote) {
+				Character::loadBuffered();
+
+				$characterIds	= Character::idsForQuote($quote->id);
+				$characters		= Character::get($characterIds);
+
+				$quizAnswers = array_map(function ($character) use ($quote) {
+					$isCorrect = $character['id'] === $quote->characterId;
+					return new QuizAnswer(
+						['answer' => $character['name'], 'isCorrect' => $isCorrect]
+					);
+				}, $characters);
+
+				return $quizAnswers;
+			});
 		}
 
 		/**

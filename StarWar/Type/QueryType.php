@@ -71,7 +71,6 @@
 							]
 						]
 					],
-					'hello' => Type::string(),
 				],
 				'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
 					$method = 'resolve' . ucfirst($info->fieldName);
@@ -151,13 +150,6 @@
 		 */
 		public function resolveTopScores($rootValue, $args) {
 			return $this->db()->findTopScores($args['limit']);
-		}
-
-		/**
-		 * @return string
-		 */
-		public function resolveHello() {
-			return 'Your graphql-php endpoint is ready! Use GraphiQL to browse API';
 		}
 
 		/**

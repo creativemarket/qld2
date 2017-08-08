@@ -20,21 +20,12 @@
 		}
 
 		/**
-		 * @param string $userName
-		 * @return int
-		 */
-		public function createUser($userName) {
-			$this->exec("INSERT into users (name) VALUES ('$userName')");
-			return $this->lastInsertRowID();
-		}
-
-		/**
 		 * @param $score
-		 * @param $userId
+		 * @param $userName
 		 * @return int
 		 */
-		public function createScore($score, $userId) {
-			$this->exec("INSERT into scores (score, userId) VALUES ('$score','$userId')");
+		public function createScore($score, $userName) {
+			$this->exec("INSERT into scores (score, userName) VALUES ('$score','$userName')");
 			return $this->lastInsertRowID();
 		}
 
@@ -72,15 +63,6 @@
 		public function findScore($id) {
 			$score = $this->find('scores', $id);
 			return new Score($score);
-		}
-
-		/**
-		 * @param $id
-		 * @return user|null
-		 */
-		public function findUser($id) {
-			$user = $this->find('users', $id);
-			return new User($user);
 		}
 
 		/**
@@ -142,18 +124,6 @@
 				array_push($scores, new Score($row));
 			}
 			return $scores;
-		}
-
-		/**
-		 * @return array
-		 */
-		public function findUsers() {
-			$results	= $this->findAll('users');
-			$users		= [];
-			while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
-				array_push($users, new User($row));
-			}
-			return $users;
 		}
 
 		public function findQuizQuestions($limit) {

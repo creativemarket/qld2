@@ -23,10 +23,8 @@ export default {
         topScores: {
             query: gql`query topScores {
                 topScores {
-                    score
-                    user {
-                        name
-                    }
+                     score
+                     userName
                 }
             }`,
         }
@@ -41,17 +39,24 @@ export default {
                 return;
             }
 
-            // TODO: Ask sarah about user ids
             this.$apollo.mutate({
-                mutation: createUser,
+                mutation: gql`mutation ($score: Int!, $userName: String!) {
+                    createScore(score: $score, userName: $userName) {
+                        score
+                        userName
+                    }
+                }`,
+                // Params
                 variables: {
-                    name,
-                    id
-                }
-            }).then(data => {
+                    score: this.userScore,
+                    userName: this.user,
+                },
+            }).then((data) => {
+                // Result
                 console.log(data);
-            }).catch(error => {
-                console.log(graphQLErrorMessages(error));
+            }).catch((error) => {
+                // Error
+                console.error(error);
             });
         },
     }
@@ -74,7 +79,7 @@ export default {
                     <div class="col-2">NAME</div>
                 </li>
                 <li v-for="(item, i) in topScores" v-bind:key="i">
-                    <div class="col-2">{{ item.user.name }}</div>
+                    <div class="col-2">{{ item.userName }}</div>
                     <div class="col-2">{{ item.score }}</div>
                 </li>
             </ul>

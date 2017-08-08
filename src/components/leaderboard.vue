@@ -40,16 +40,18 @@ export default {
             }
 
             this.$apollo.mutate({
-                mutation: gql`mutation ($score: Int!, $userName: String!) {
-                    createScore(score: $score, userName: $userName) {
+                mutation: gql`mutation ($scoreInput: ScoreInput!) {
+                    createScore(scoreInput: $scoreInput) {
                         score
                         userName
                     }
                 }`,
                 // Params
                 variables: {
-                    score: this.userScore,
-                    userName: this.user,
+                    scoreInput: {
+                        score: this.userScore,
+                        userName: this.user
+                    }
                 },
             }).then((data) => {
                 // Result

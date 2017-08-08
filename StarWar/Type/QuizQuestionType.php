@@ -5,6 +5,7 @@
 	use StarWar\Data\QuizQuestion;
 	use StarWar\Data\DataSource;
 	use StarWar\Data\Buffer\Character;
+	use StarWar\Data\Buffer\Movie;
 	use StarWar\Types;
 	use GraphQL\Deferred;
 	use GraphQL\Type\Definition\ObjectType;
@@ -68,6 +69,7 @@
 			$characterId	= $quote->characterId;
 			$characterIds	= [$characterId];
 
+// TODO: stop unique checking so much
 			while (count(array_unique($characterIds)) < $this->maxAnswers) {
 				array_push($characterIds, rand(1, $this->maxCharacters));
 			}
@@ -94,23 +96,36 @@
 
 		/**
 		 * @param QuizQuestion $question
-		 * @return array
+		 * @return Deferred
 		 */
 		public function resolveMovies(QuizQuestion $question) {
-			$movieId = $question->quote->movieId;
-			$movie = $this->db()->findMovie($movieId);
-			$movies = [new QuizAnswer(['answer' => $movie->title, 'isCorrect' => true])];
+			$quote		= $question->quote;
+			$movieId	= $quote->movieId;
+			$movieIds	= [$movieId];
 
-			$randMovies = $this->db()->query("SELECT * FROM movies ORDER BY RANDOM() LIMIT 3");
-
-			while ($row = $randMovies->fetchArray(SQLITE3_ASSOC)) {
-				if ($row['id'] !== $movieId && count($movies) < $this->maxAnswers) {
-					array_push($movies, new QuizAnswer(
-						['answer' => $row['title'] , 'isCorrect' => false])
-					);
-				}
+// TODO: stop unique checking so much
+			while (count(array_unique($movieIds)) < $this->maxAnswers) {
+				array_push($movieIds, rand(1, $this->maxMovies));
 			}
-			return $movies;
+			$movieIds = array_unique($movieIds);
+
+			Movie::add($quote->id, $movieIds);
+
+			return new Deferred(function () use ($quote) {
+				Movie::loadBuffered();
+
+				$movieIds	= Movie::idsForQuote($quote->id);
+				$movies		= Movie::get($movieIds);
+
+				$quizAnswers = array_map(function($movie) use ($quote) {
+					$isCorrect = $movie['id'] === $quote->movieId;
+					return new QuizAnswer(
+						['answer' => $movie['title'], 'isCorrect' => $isCorrect]
+					);
+				}, $movies);
+
+				return $quizAnswers;
+			});
 		}
 
 		/**

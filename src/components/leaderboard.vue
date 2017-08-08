@@ -59,7 +59,7 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div class="card">
         <div class="form" v-if="this.isComplete">
             <label>
                 Your score: <strong>{{ userScore }}</strong> <input type="text" placeholder="ENTER INITALS" maxlength="3" v-model="user" />

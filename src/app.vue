@@ -79,8 +79,12 @@ export default {
 
 <template>
     <div class="">
-        <h1>Welcome to Star War</h1>
-        <score :score="this.score" :total="this.total"></score>
+        <div class="stars"></div>
+        <div class="starsLg"></div>
+        <div class="header">
+            <h1>Welcome to Star War</h1>
+            <score :score="this.score" :total="this.total"></score>
+        </div>
         <message :message="this.message"></message>
         <card v-for="(q, i) in quiz" :quiz="q" v-show="i === current" v-bind:key="i"></card>
         <leaderboard v-if="this.boardVisible" :userScore="this.score" :isComplete="this.completed"></leaderboard>

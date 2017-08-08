@@ -11,9 +11,10 @@ export default {
 
 <template>
     <div class="score">
-        <h1>{{ score }} pts</h1>
+        <h2>{{ score }} pts</h2>
     </div>
 </template>
 
 <style lang="scss" scoped>
+   @import "~styles/score.scss";
 </style>

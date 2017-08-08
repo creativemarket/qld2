@@ -1,8 +1,86 @@
+// Imports Typography, grid, etc
+@import url('https://fonts.googleapis.com/css?family=Copse|Saira');
+
 body {
     background: #f5f4f1;
 }
 
-h1 {
-    color: red;
+h1, h2, h3, h4, h5, h6 {
+    color: #fff;
+    font-family: 'Saira', sans-serif;
 }
-// Imports Typography, grid, etc
+
+@function multiple-box-shadow ($n) {
+    $value: '#{random(2000)}px #{random(2000)}px #fff';
+
+    @for $i from 2 through $n {
+        $value: '#{$value}, #{random(2000)}px #{random(2000)}px #fff';
+    }
+
+    @return unquote($value);
+}
+
+$stars: multiple-box-shadow(700);
+$starsLg: multiple-box-shadow(300);
+
+.stars {
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow: $stars;
+    -webkit-box-shadow: $stars;
+    -moz-box-shadow: $stars;
+    box-shadow: $stars;
+    animation: animateStar 200s linear infinite;
+
+    &:after {
+        content: " ";
+        position: absolute;
+        top: 2000px;
+        width: 1px;
+        height: 1px;
+        background: transparent;
+        -webkit-box-shadow: $stars;
+        -moz-box-shadow: $stars;
+        box-shadow: $stars;
+    }
+}
+
+.starsLg {
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    box-shadow: $starsLg;
+    -webkit-box-shadow: $starsLg;
+    -moz-box-shadow: $starsLg;
+    box-shadow: $starsLg;
+    animation: animateStar 100s linear infinite;
+
+    &:after {
+        content: " ";
+        position: absolute;
+        top: 2000px;
+        width: 1px;
+        height: 1px;
+        background: transparent;
+        -webkit-box-shadow: $starsLg;
+        -moz-box-shadow: $starsLg;
+        box-shadow: $starsLg;
+    }
+}
+
+
+
+@keyframes animateStar {
+    from {
+        transform: translateY(0px);
+    } 
+    
+    to {
+        transform: translateY(-2000px);
+    }
+}
+
+.header {
+    text-align: center;
+}

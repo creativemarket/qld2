@@ -33,7 +33,7 @@
 				'mutation' => Types::mutation(),
 			]);
 
-			$args	= json_decode($data['variables'], true);
+			$args	= $data['variables'];
 			$result	= GraphQL::execute($schema, $query, null, $appContext, $args);
 		}
 

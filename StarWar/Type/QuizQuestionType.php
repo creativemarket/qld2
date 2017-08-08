@@ -13,6 +13,19 @@
 	class QuizQuestionType extends ObjectType {
 
 		/**
+		 * Not ideal, but for the moment we know there are only 11 Characters in the db
+		 * @var int
+		 */
+		public $maxCharacters = 11;
+		/**
+		 * Not ideal, but for the moment we know there are only 9 Movies in the db
+		 * @var int
+		 */
+		public $maxMovies = 9;
+		/** @var int */
+		public $maxAnswers = 3;
+
+		/**
 		 * @return QuizQuestionType
 		 */
 		public function __construct() {
@@ -55,9 +68,8 @@
 			$characterId	= $quote->characterId;
 			$characterIds	= [$characterId];
 
-			while (count(array_unique($characterIds)) < 3) {
-//				Not ideal, but for the moment we know there are only 11 Characters in the db
-				array_push($characterIds, rand(1, 11));
+			while (count(array_unique($characterIds)) < $this->maxAnswers) {
+				array_push($characterIds, rand(1, $this->maxCharacters));
 			}
 			$characterIds = array_unique($characterIds);
 
@@ -92,7 +104,7 @@
 			$randMovies = $this->db()->query("SELECT * FROM movies ORDER BY RANDOM() LIMIT 3");
 
 			while ($row = $randMovies->fetchArray(SQLITE3_ASSOC)) {
-				if ($row['id'] !== $movieId && count($movies) < 3) {
+				if ($row['id'] !== $movieId && count($movies) < $this->maxAnswers) {
 					array_push($movies, new QuizAnswer(
 						['answer' => $row['title'] , 'isCorrect' => false])
 					);

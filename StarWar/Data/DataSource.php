@@ -126,6 +126,10 @@
 			return $scores;
 		}
 
+		/**
+		 * @param $limit
+		 * @return array
+		 */
 		public function findQuizQuestions($limit) {
 			$results		= $this->query("SELECT * FROM quotes ORDER BY RANDOM() LIMIT $limit");
 			$quizQuestions	= [];

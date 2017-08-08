@@ -47,7 +47,7 @@
 			],
 		];
 	}
-	
+
 	header('Content-Type: application/json', true, $httpStatus);
 	header("Access-Control-Allow-Origin: http://localhost:9000");
 	echo json_encode($result);

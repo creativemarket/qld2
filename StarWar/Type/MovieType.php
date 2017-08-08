@@ -3,12 +3,7 @@
 
 	use StarWar\Types;
 	use GraphQL\Type\Definition\ObjectType;
-	use GraphQL\Type\Definition\ResolveInfo;
 
-	/**
-	 * Class MovieType
-	 * @package GraphQL\Examples\Social\Type
-	 */
 	class MovieType extends ObjectType {
 		/**
 		 * MovieType constructor.

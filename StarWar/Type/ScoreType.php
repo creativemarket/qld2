@@ -1,8 +1,6 @@
 <?php
 	namespace StarWar\Type;
 
-	use StarWar\Data\Score;
-	use StarWar\Data\DataSource;
 	use StarWar\Types;
 	use GraphQL\Type\Definition\ObjectType;
 	use GraphQL\Type\Definition\ResolveInfo;
@@ -31,12 +29,5 @@
 				},
 			];
 			parent::__construct($config);
-		}
-
-		/**
-		 * @return DataSource
-		 */
-		private function db() {
-			return new DataSource();
 		}
 	}

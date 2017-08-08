@@ -1,9 +1,7 @@
 <?php
 	namespace StarWar;
 
-	use StarWar\Data\DataSource;
 	use StarWar\Data\Character;
-	use GraphQL\Utils;
 
 	/**
 	 * Class AppContext

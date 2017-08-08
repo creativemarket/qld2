@@ -16,24 +16,31 @@
 		/**
 		 * @param int $quoteId
 		 * @param array $characterIds
+		 * @return void
 		 */
 		public static function add($quoteId, $characterIds) {
 			self::$ids += [$quoteId => $characterIds];
 		}
 
+		/**
+		 * @param $id
+		 * @return array
+		 */
 		public static function idsForQuote($id) {
 			return self::$ids[$id];
 		}
 
 		/**
-		 * return void
+		 * @return void
 		 */
 		public static function loadBuffered() {
-			if (self::$loaded) { return; }
+			if (self::$loaded) {
+				return;
+			}
 
 			$characterIds = [];
 			foreach (self::$ids as $characterIdsForQuote) {
-				foreach(array_values($characterIdsForQuote) as $charId) {
+				foreach (array_values($characterIdsForQuote) as $charId) {
 					array_push($characterIds, $charId);
 				}
 			}
@@ -52,11 +59,14 @@
 		 * @return array
 		 */
 		public static function get($ids) {
-			return array_map(function($id) {
+			return array_map(function ($id) {
 				return self::$characters[$id];
 			}, $ids);
 		}
 
+		/**
+		 * @return DataSource
+		 */
 		private static function db() {
 			return new DataSource();
 		}

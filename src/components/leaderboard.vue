@@ -1,6 +1,13 @@
 <script>
 import gql from 'graphql-tag';
 
+const topScoresQuery = gql`query topScores {
+    topScores {
+        score
+        userName
+    }
+}`;
+
 export default {
     props: {
         userScore: {
@@ -21,22 +28,19 @@ export default {
     apollo: {
         // GraphQL query
         topScores: {
-            query: gql`query topScores {
-                topScores {
-                     score
-                     userName
-                }
-            }`,
+            query: topScoresQuery,
         }
     },
     methods: {
         saveScore() {
-            const name = this.user;
-            const score = this.userScore;
+            const payload = {
+                score: this.userScore,
+                userName: this.user
+            };
 
-            if (!name && !isComplete) {
+            if (!payload.userName) {
                 alert('Please enter your initials');
-                return;
+                return false;
             }
 
             this.$apollo.mutate({
@@ -49,13 +53,31 @@ export default {
                 // Params
                 variables: {
                     scoreInput: {
-                        score: this.userScore,
-                        userName: this.user
+                        score: payload.score,
+                        userName: payload.userName,
                     }
+                },
+                // Update leaderboard
+                update: (store, { data: payload }) => {
+                    const data = store.readQuery({ query: topScoresQuery });
+                    console.log(data);
+                    data.topScores.push(payload);
+                    // Write data back to the cache.
+                    store.writeQuery({ query: topScoresQuery, data });
+                },
+                // Optimistic UI
+                optimisticResponse: {
+                    __typename: 'Mutation',
+                    createScore: {
+                        __typename: 'Score',
+                        scoreInput: {
+                            score: payload.score,
+                            userName: payload.userName,
+                        }
+                    },
                 },
             }).then((data) => {
                 // Result
-                console.log(data);
             }).catch((error) => {
                 // Error
                 console.error(error);
@@ -69,26 +91,45 @@ export default {
     <div class="card">
         <div class="form" v-if="this.isComplete">
             <label>
-                Your score: <strong>{{ userScore }}</strong> <input type="text" placeholder="ENTER INITALS" maxlength="3" v-model="user" />
-                <button v-on:click="saveScore">Enter Score</button>
+                Your score: <strong>{{ userScore }}</strong> <input type="text" placeholder="ENTER INITALS" maxlength="3" v-model="user" :disabled="!this.userScore" />
+                <button v-on:click="saveScore" :disabled="!this.userScore">Enter Score</button>
             </label>
         </div>
         <div class="scores">
             <h1>HIGH SCORES</h1>
             <ul>
                 <li>
-                    <div class="col-2">SCORE</div>
-                    <div class="col-2">NAME</div>
+                    <div class="col-2"><h4>NAME</h4></div>
+                    <div class="col-2"><h4>SCORE</h4></div>
                 </li>
                 <li v-for="(item, i) in topScores" v-bind:key="i">
                     <div class="col-2">{{ item.userName }}</div>
                     <div class="col-2">{{ item.score }}</div>
                 </li>
+                <br>
+                <li class="clear"></li>
             </ul>
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-   @import "~styles/card.scss";
+    @import "~styles/card.scss";
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .col-2 {
+        width: 45%;
+        float: left;
+        margin: 0 15px;
+    }
+
+    .clear {
+        height: 20px;
+        clear: both;
+    }
 </style>

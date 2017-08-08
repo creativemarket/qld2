@@ -83,10 +83,13 @@ export default {
         <div class="starsLg"></div>
         <div class="header">
             <h1>Welcome to Star War</h1>
+            <p class="link" v-on:click="toggleLeaderBoard(true)">View Leaderboard</p>
             <score :score="this.score" :total="this.total"></score>
         </div>
         <message :message="this.message"></message>
-        <card v-for="(q, i) in quiz" :quiz="q" v-show="i === current" v-bind:key="i"></card>
+        <div v-if="!this.boardVisible">
+            <card v-for="(q, i) in quiz" :quiz="q" v-show="i === current" v-bind:key="i"></card>
+        </div>
         <leaderboard v-if="this.boardVisible" :userScore="this.score" :isComplete="this.completed"></leaderboard>
     </div>
 </template>

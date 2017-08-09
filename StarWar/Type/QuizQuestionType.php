@@ -73,9 +73,8 @@
 			while (count(array_unique($characterIds)) < $this->maxAnswers) {
 				array_push($characterIds, rand(1, $this->maxCharacters));
 			}
-			$characterIds = array_unique($characterIds);
-
-			Character::add($quote->id, $characterIds);
+			shuffle($characterIds);
+			Character::add($quote->id, array_unique($characterIds));
 
 			return new Deferred(function () use ($quote) {
 				Character::loadBuffered();
@@ -107,9 +106,8 @@
 			while (count(array_unique($movieIds)) < $this->maxAnswers) {
 				array_push($movieIds, rand(1, $this->maxMovies));
 			}
-			$movieIds = array_unique($movieIds);
-
-			Movie::add($quote->id, $movieIds);
+			shuffle($movieIds);
+			Movie::add($quote->id, array_unique($movieIds));
 
 			return new Deferred(function () use ($quote) {
 				Movie::loadBuffered();

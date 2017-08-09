@@ -36,8 +36,8 @@
 		 * @return null|\StarWar\Data\score
 		 */
 		public function resolveCreateScore($rootValue, $args) {
-			$scoreInput = $args['scoreInput'];
-			$scoreId = $this->db()->createScore($scoreInput['score'], $scoreInput['userName']);
+			$scoreInput	= $args['scoreInput'];
+			$scoreId	= $this->db()->createScore($scoreInput['score'], $scoreInput['userName']);
 			return $this->db()->findScore($scoreId);
 		}
 

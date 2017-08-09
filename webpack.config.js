@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
     entry: './src/main.js',
@@ -7,7 +8,12 @@ module.exports = {
         publicPath: 'dist/',
         filename: 'build.js',
     },
-    plugins: [],
+    plugins: [
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+        }),
+    ],
     devServer: {
         inline: true,
         port: 9000,
@@ -33,12 +39,7 @@ module.exports = {
             scss: 'style!css!sass'
         }
     },
-    externals: [
-        'jquery-ui',
-        {
-            jquery: 'jQuery',
-        },
-    ],
+    externals: [],
     resolve: {
         alias: {
             vue$: 'vue/dist/vue.common.js',

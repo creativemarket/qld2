@@ -9,9 +9,7 @@ export default {
         },
     },
     updated() {
-        setTimeout(() => {
-            EventBus.$emit('show:message', { visibile: false, type: undefined });
-        }, 2000); 
+        $('.alert').fadeIn(100).delay(1000).fadeOut('slow');
     },
 }
 </script>

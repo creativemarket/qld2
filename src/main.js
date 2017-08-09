@@ -13,6 +13,7 @@ import Vue from 'vue';
 import App from './app.vue';
 import { ApolloClient, createNetworkInterface } from 'apollo-client';
 import VueApollo from 'vue-apollo';
+import $ from 'jquery';
 
 export const EventBus = new Vue();
 

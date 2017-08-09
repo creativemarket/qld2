@@ -58,23 +58,11 @@ export default {
                     }
                 },
                 // Update leaderboard
-                update: (store, { data: payload }) => {
-                    const data = store.readQuery({ query: topScoresQuery });
-                    console.log(data);
-                    data.topScores.push(payload);
-                    // Write data back to the cache.
-                    store.writeQuery({ query: topScoresQuery, data });
-                },
-                // Optimistic UI
-                optimisticResponse: {
-                    __typename: 'Mutation',
-                    createScore: {
-                        __typename: 'Score',
-                        scoreInput: {
-                            score: payload.score,
-                            userName: payload.userName,
-                        }
-                    },
+                update: (proxy, { data: createScore }) => {
+                    const data = proxy.readQuery({ query: topScoresQuery });
+                    data.topScores.push(createScore);
+                    // Write data back to the local cache
+                    proxy.writeQuery({ query: topScoresQuery, data });
                 },
             }).then((data) => {
                 // Result

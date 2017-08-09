@@ -1,7 +1,7 @@
 .card {
     font-family: 'Saira', sans-serif;
     background: #f2f2ef;
-    width: 50%;
+    width: 60%;
     margin: 0 auto;
     padding: 0px 15px;
     border: 3px solid #fff;
@@ -17,4 +17,9 @@
     margin-right: 5px;
     border: 1px solid #857f77;
     background: #eee;
+
+    &:hover {
+        background: #003B6F;
+        color: white;
+    }
 }
